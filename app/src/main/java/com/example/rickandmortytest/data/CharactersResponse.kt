@@ -6,5 +6,5 @@ data class CharactersResponse(
     @SerializedName("info")
     val info: Info,
     @SerializedName("results")
-    val result: List<Result>
+    val characters: List<CharactersInfo>
 )

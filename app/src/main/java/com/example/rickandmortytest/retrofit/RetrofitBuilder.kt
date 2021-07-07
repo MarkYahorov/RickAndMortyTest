@@ -1,4 +1,4 @@
-package com.example.rickandmortytest
+package com.example.rickandmortytest.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

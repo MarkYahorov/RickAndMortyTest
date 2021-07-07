@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.DetailsFragment"
+    android:background="@color/white">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/current_chatacter_photo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/current_character_name_in_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/current_status"
+        app:layout_constraintEnd_toEndOf="@+id/current_chatacter_photo"
+        app:layout_constraintStart_toStartOf="@+id/current_chatacter_photo"
+        app:layout_constraintTop_toBottomOf="@+id/current_chatacter_photo"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/current_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/current_species"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_character_name_in_details" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/current_species"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/current_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_status" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/current_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/current_gender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_species" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/current_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/current_name_of_planet"
+        app:layout_constraintTop_toBottomOf="@+id/current_type" />
+
+    <TextView
+        android:id="@+id/current_name_of_planet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_gender" />
+</androidx.constraintlayout.widget.ConstraintLayout>
