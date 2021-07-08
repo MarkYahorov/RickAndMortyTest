@@ -13,15 +13,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.ItemOfRecycl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (supportFragmentManager.backStackEntryCount < 1) {
-            setFragment()
-        }
-        Log.e("key", " not in if ${supportFragmentManager.backStackEntryCount}")
+        setFragment()
     }
 
     private fun setFragment() {
@@ -39,7 +31,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.ItemOfRecycl
         bundle.putParcelable("CURRENT_CHARACTER", currentCharactersInfo)
         detailsFragment.arguments = bundle
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, detailsFragment)
+            .replace(R.id.fragment_container, detailsFragment)
             .addToBackStack(null)
             .commit()
         supportFragmentManager.executePendingTransactions()
@@ -48,6 +40,9 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.ItemOfRecycl
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStackImmediate("", POP_BACK_STACK_INCLUSIVE)
+        }
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            finish()
         }
         super.onBackPressed()
     }

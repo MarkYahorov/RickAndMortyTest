@@ -3,9 +3,9 @@ package com.example.rickandmortytest.retrofit
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitBuilder {
+class RetrofitBuilder {
 
-    private const val BASE_URL = " https://rickandmortyapi.com/api/"
+    private val BASE_URL = " https://rickandmortyapi.com/api/"
 
     private val retrofit by lazy {
         Retrofit.Builder()
