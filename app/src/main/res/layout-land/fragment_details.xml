@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.DetailsFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fillViewport="true">
 
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/current_character_photo"
         android:layout_width="match_parent"
@@ -22,7 +25,7 @@
         android:id="@+id/current_character_name_in_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/current_status"
         app:layout_constraintEnd_toEndOf="@+id/current_character_photo"
         app:layout_constraintStart_toStartOf="@+id/current_character_photo"
@@ -33,7 +36,7 @@
         android:id="@+id/current_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/current_species"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +46,7 @@
         android:id="@+id/current_species"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/current_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +56,7 @@
         android:id="@+id/current_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/current_gender"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +66,7 @@
         android:id="@+id/current_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_margin="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/current_name_of_planet"
@@ -73,10 +76,11 @@
         android:id="@+id/current_name_of_planet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:layout_marginBottom="100dp"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/current_gender" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

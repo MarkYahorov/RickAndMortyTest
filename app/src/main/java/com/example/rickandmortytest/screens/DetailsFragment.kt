@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.rickandmortytest.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
 import com.example.rickandmortytest.R
 import com.example.rickandmortytest.data.CharactersInfo
 
@@ -21,10 +22,6 @@ class DetailsFragment : Fragment() {
     private lateinit var currentGender: TextView
     private lateinit var currentPlanetName: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -35,7 +32,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun initAll(view: View){
-        currentPhoto = view.findViewById(R.id.current_chatacter_photo)
+        currentPhoto = view.findViewById(R.id.current_character_photo)
         currentName = view.findViewById(R.id.current_character_name_in_details)
         currentStatus = view.findViewById(R.id.current_status)
         currentSpecies = view.findViewById(R.id.current_species)
@@ -44,11 +41,11 @@ class DetailsFragment : Fragment() {
         currentPlanetName = view.findViewById(R.id.current_name_of_planet)
     }
 
-    override fun onStart() {
-        super.onStart()
-        val bundle = arguments
-        if (bundle!=null){
-            getInfoAboutCharacter(bundle.getParcelable("CURRENT_CHARACTER")!!)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val b = arguments?.getParcelable<CharactersInfo>(CURRENT_CHARACTER_FOR_DETAIL_SCREEN)
+        if (b!=null) {
+            getInfoAboutCharacter(b)
         }
     }
 
@@ -60,7 +57,7 @@ class DetailsFragment : Fragment() {
         if (currentInfo.type!="") {
             currentType.text = currentInfo.type
         } else {
-            currentType.text = "WE DON'T KNOW"
+            currentType.text = getString(R.string.current_character_type_if_null)
         }
         currentGender.text = currentInfo.gender
         currentPlanetName.text = currentInfo.origin.planetName

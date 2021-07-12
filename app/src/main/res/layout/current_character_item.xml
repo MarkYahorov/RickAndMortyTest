@@ -7,7 +7,7 @@
     android:layout_height="90dp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/current_character_photo"
+        android:id="@+id/current_character_photo_in_holder"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="30dp"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="end"
-        app:constraint_referenced_ids="current_character_photo"
+        app:constraint_referenced_ids="current_character_photo_in_holder"
         tools:layout_editor_absoluteX="411dp" />
 
 

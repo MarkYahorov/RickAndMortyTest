@@ -1,16 +1,10 @@
 package com.example.rickandmortytest.screens
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,37 +14,35 @@ import bolts.Task
 import com.example.rickandmortytest.AllCharactersAdapter
 import com.example.rickandmortytest.R
 import com.example.rickandmortytest.data.CharactersInfo
-import com.example.rickandmortytest.data.ProgressOrError
+import com.example.rickandmortytest.data.CharactersResponse
+import com.example.rickandmortytest.data.PaginationFooter
 import com.example.rickandmortytest.retrofit.CharacterRepository
+import java.util.ArrayList
 
 class AllCharactersListFragment : Fragment() {
 
+    companion object {
+        private const val ALL_LIST_OF_CHARACTERS = "ALL_LIST_OF_CHARACTERS"
+    }
+
     private lateinit var allCharactersRecyclerView: RecyclerView
-    private lateinit var progressBar: ProgressBar
     private lateinit var swipeLayout: SwipeRefreshLayout
 
     private val characterRepository = CharacterRepository()
     private var listCharacterInto = mutableListOf<CharactersInfo>()
-    private val listOfProgress = mutableListOf<ProgressOrError>()
     private var isLoading = false
-    private var isFirstLoading = true
-    var count: Int = 1
-    private var errorText = ""
+    private var count: Int = 0
+    private var sendInfo: OpenDetailNavigator? = null
+    private val paginationFooter = PaginationFooter(true, null)
+    private var oldListSize = 0
 
-
-    interface ItemOfRecyclerClickListener {
-        fun goToDetailsScreen(currentCharactersInfo: CharactersInfo)
+    interface OpenDetailNavigator {
+        fun navigate(currentCharactersInfo: CharactersInfo)
     }
-
-    private var sendInfo: ItemOfRecyclerClickListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        try {
-            sendInfo = context as ItemOfRecyclerClickListener
-        } catch (e: Exception) {
-            Toast.makeText(context, "IMPL INTERFACE", Toast.LENGTH_LONG).show()
-        }
+        sendInfo = context as OpenDetailNavigator
     }
 
     override fun onCreateView(
@@ -64,117 +56,130 @@ class AllCharactersListFragment : Fragment() {
 
     private fun initAll(view: View) {
         allCharactersRecyclerView = view.findViewById(R.id.all_characters_list)
-        // progressBar = view.findViewById(R.id.loading_progress)
         swipeLayout = view.findViewById(R.id.swipe_layout)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createRecycler()
+
+        if (savedInstanceState != null) {
+            listCharacterInto =
+                savedInstanceState.getParcelableArrayList<CharactersInfo>(ALL_LIST_OF_CHARACTERS) as MutableList<CharactersInfo>
+        }
+        initRecycler()
+        if (savedInstanceState == null) {
+            loadCharacters(false)
+        }
     }
 
     override fun onStart() {
         super.onStart()
         setSwipeLayout()
-        createListResult()
+        addScrollListener()
     }
 
-    private fun createListResult() {
-        characterRepository.getCharacters(count)
-            .continueWith { characterResponse ->
-                when {
-                    characterResponse.error != null -> {
-                        errorText = characterResponse.error.message.toString()
-                    }
-                    else -> {
-                        if (isFirstLoading) {
-                            characterResponse.result.characters.forEach {
-                                listCharacterInto.add(it)
-                            }
-                        }
-                        isFirstLoading = false
-                    }
+    private fun loadCharacters(isRefresh: Boolean) {
+        if (!isLoading) {
+            isLoading = true
+            if (isRefresh){
+                allCharactersRecyclerView.adapter?.notifyItemRangeRemoved(0,listCharacterInto.size)
+                listCharacterInto.clear()
+                count = 1
+            } else {
+                ++count
+            }
+            characterRepository.getCharacters(count)
+                .continueWith { characterResponse ->
+                   getCharacterRequest(characterResponse)
+                }.onSuccess({
+                    notifyAdapter()
+                }, Task.UI_THREAD_EXECUTOR)
+        }
+    }
+
+    private fun notifyAdapter(){
+        when {
+            paginationFooter.errorMessage!=null -> {
+                allCharactersRecyclerView.adapter?.run { notifyItemChanged(itemCount - 1) }
+            }
+            paginationFooter.isEndOfPages -> {
+                allCharactersRecyclerView.adapter?.run { notifyItemChanged(itemCount - 1) }
+            }
+            else -> {
+                allCharactersRecyclerView.adapter?.notifyItemRangeInserted(oldListSize, listCharacterInto.size - oldListSize)
+                if (oldListSize == 0) {
+                    allCharactersRecyclerView.scrollToPosition(0)
                 }
-                Thread.sleep(3000)
-            }.onSuccess({
-                if (errorText != "") {
-                    listOfProgress[0] = ProgressOrError(VISIBLE, GONE, VISIBLE, VISIBLE, errorText)
-                    allCharactersRecyclerView.adapter?.notifyDataSetChanged()
-                    createDialog(errorText)
-                    swipeLayout.isRefreshing = false
-                    errorText = ""
-                    allCharactersRecyclerView.adapter?.notifyDataSetChanged()
-                } else {
-                    allCharactersRecyclerView.adapter?.notifyDataSetChanged()
-                    swipeLayout.isRefreshing = false
-                }
-            }, Task.UI_THREAD_EXECUTOR)
-        listOfProgress[0] = ProgressOrError(VISIBLE, VISIBLE, GONE, GONE, "")
+            }
+        }
+        swipeLayout.isRefreshing = false
         isLoading = false
+        paginationFooter.errorMessage = null
+        paginationFooter.isEndOfPages = false
     }
 
-    private fun createRecycler() {
-        listOfProgress.add(ProgressOrError(VISIBLE, VISIBLE, GONE, GONE, ""))
+    private fun getCharacterRequest(characterResponse:Task<CharactersResponse>){
+        when {
+            characterResponse.error != null -> {
+                paginationFooter.errorMessage = characterResponse.error.message
+                --count
+            }
+            characterResponse.result.info.next == null -> {
+                paginationFooter.isEndOfPages = true
+            }
+            else -> {
+                oldListSize = listCharacterInto.size
+                characterResponse.result.characters.forEach {
+                    listCharacterInto.add(it)
+                }
+            }
+        }
+        Thread.sleep(3000)
+    }
+
+    private fun initRecycler() {
         with(allCharactersRecyclerView) {
-            adapter = AllCharactersAdapter(listCharacterInto, listOfProgress, {
-                sendInfo?.goToDetailsScreen(it)
+            adapter = AllCharactersAdapter(listCharacterInto, paginationFooter, {
+                sendInfo?.navigate(it)
             }, {
-                checkIsLoading(false, count)
+                loadCharacters(false)
             })
             layoutManager = LinearLayoutManager(activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
-            addOnScrollListener(object : OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val totalItemCount = layoutManager.itemCount
-                    val lastVisible = layoutManager.findLastVisibleItemPosition()
-                    val endHasBeenReached = lastVisible + 1 >= totalItemCount
-                    if (totalItemCount > 0 && endHasBeenReached) {
-                        checkIsLoading(true, ++count)
-                    }
+        }
+    }
+
+    private fun addScrollListener() {
+        allCharactersRecyclerView.addOnScrollListener(object : OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val endHasBeenReached = lastVisible + 1 >= totalItemCount
+                if (!paginationFooter.isEndOfPages && totalItemCount > 0 && endHasBeenReached) {
+                    loadCharacters(false)
                 }
-            })
-        }
+            }
+        })
     }
 
-    private fun checkIsLoading(isFirstLoad: Boolean, count: Int) {
-        if (!isLoading) {
-            isLoading = true
-            listOfProgress[0] = ProgressOrError(VISIBLE, VISIBLE, GONE, GONE, "")
-            allCharactersRecyclerView.adapter?.notifyDataSetChanged()
-            isFirstLoading = isFirstLoad
-            count
-            createListResult()
-            allCharactersRecyclerView.adapter?.notifyDataSetChanged()
-        }
-    }
-
-    private fun createDialog(error: String) {
-        val dialog = Dialog(requireContext())
-        with(dialog) {
-            setCancelable(false)
-            setContentView(R.layout.error_dialog)
-        }
-        val errorMessage = dialog.findViewById<TextView>(R.id.error_message)
-        val closeDialogBtn = dialog.findViewById<Button>(R.id.close_btn)
-
-        errorMessage.text = error
-        closeDialogBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(ALL_LIST_OF_CHARACTERS,
+            listCharacterInto as ArrayList<CharactersInfo>)
     }
 
     private fun setSwipeLayout() {
         swipeLayout.setOnRefreshListener {
-            createListResult()
+            loadCharacters(true)
         }
     }
 
     override fun onStop() {
         super.onStop()
+        swipeLayout.setOnRefreshListener(null)
         allCharactersRecyclerView.clearOnScrollListeners()
     }
 }

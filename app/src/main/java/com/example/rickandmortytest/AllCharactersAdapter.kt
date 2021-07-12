@@ -12,21 +12,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.rickandmortytest.data.CharactersInfo
-import com.example.rickandmortytest.data.ProgressOrError
+import com.example.rickandmortytest.data.PaginationFooter
 
 class AllCharactersAdapter(
     private val allCharactersList: List<CharactersInfo>,
-    private val listOfProgress: List<ProgressOrError>,
+    private val paginationFooter: PaginationFooter,
     private val goToDetailsScreen: (CharactersInfo) -> Unit,
     private val startReloading: () -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object{
+        private const val PROGRESS_ITEM_VIEW_TYPE = 1
+        private const val CHARACTER_ITEM_VIEW_TYPE = 0
+    }
+
     inner class CurrentCharacterHolder(
         private val item: View,
         private val goToDetailsScreen: (CharactersInfo) -> Unit,
     ) : RecyclerView.ViewHolder(item) {
-        private val currentPhoto = item.findViewById<ImageView>(R.id.current_character_photo)
+        private val currentPhoto = item.findViewById<ImageView>(R.id.current_character_photo_in_holder)
         private val currentName = item.findViewById<TextView>(R.id.current_character_name)
 
         fun bind(information: CharactersInfo) {
@@ -49,14 +54,30 @@ class AllCharactersAdapter(
         private val errorMessage = item.findViewById<TextView>(R.id.error_message_in_holder)
         private val reloadingBtn = item.findViewById<Button>(R.id.reloading_btn)
 
-        fun bind(progressAndError: ProgressOrError) {
-            progress.visibility = progressAndError.progressBarVisible
-            errorMessage.visibility = progressAndError.errorMessageVisible
-            item.visibility = progressAndError.layoutVisible
-            reloadingBtn.visibility = progressAndError.reloadingBtnVisible
-            errorMessage.text = progressAndError.errorMessage
-            reloadingBtn.setOnClickListener {
-                startReloading()
+        fun bind(paginationFooter: PaginationFooter) {
+            when {
+                paginationFooter.isEndOfPages -> {
+                    progress.visibility = GONE
+                    errorMessage.visibility = GONE
+                    item.visibility = GONE
+                    reloadingBtn.visibility = GONE
+                }
+                paginationFooter.errorMessage== null -> {
+                    progress.visibility = VISIBLE
+                    errorMessage.visibility = GONE
+                    item.visibility = VISIBLE
+                    reloadingBtn.visibility = GONE
+                }
+                else -> {
+                    progress.visibility = GONE
+                    errorMessage.visibility = VISIBLE
+                    item.visibility = VISIBLE
+                    reloadingBtn.visibility = VISIBLE
+                    errorMessage.text = paginationFooter.errorMessage
+                    reloadingBtn.setOnClickListener {
+                        startReloading
+                    }
+                }
             }
         }
 
@@ -66,15 +87,15 @@ class AllCharactersAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == allCharactersList.lastIndex) {
-            1
+        return if (position == allCharactersList.size) {
+            PROGRESS_ITEM_VIEW_TYPE
         } else {
-            0
+            CHARACTER_ITEM_VIEW_TYPE
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == 0) {
+        return if (viewType == CHARACTER_ITEM_VIEW_TYPE) {
             val view = LayoutInflater.from(parent.context).inflate(
                 R.layout.current_character_item,
                 parent,
@@ -91,17 +112,22 @@ class AllCharactersAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position != allCharactersList.lastIndex) {
+        if (holder.itemViewType == CHARACTER_ITEM_VIEW_TYPE) {
             (holder as CurrentCharacterHolder).bind(allCharactersList[position])
         } else {
-            (holder as ProgressHolder).bind(listOfProgress[0])
+            (holder as ProgressHolder).bind(paginationFooter)
         }
     }
 
-    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        super.onViewRecycled(holder)
-    }
+//    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+//        super.onViewRecycled(holder)
+//        if (holder.itemViewType == PROGRESS_ITEM_VIEW_TYPE ){
+//            (holder as ProgressHolder).unbind()
+//        } else {
+//            (holder as CurrentCharacterHolder).unbind()
+//        }
+//    }
 
-    override fun getItemCount(): Int = allCharactersList.size
+    override fun getItemCount(): Int = allCharactersList.size+1
 
 }
