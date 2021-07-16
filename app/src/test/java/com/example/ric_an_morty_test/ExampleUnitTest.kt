@@ -1,4 +1,4 @@
-package com.example.rickandmortytest
+package com.example.ric_an_morty_test
 
 import org.junit.Test
 
