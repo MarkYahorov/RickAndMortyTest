@@ -1,16 +1,16 @@
-package com.example.RickAndMortyTest.retrofit
+package com.example.ric_an_morty_test.retrofit
 
 import android.content.Context
 import android.database.Cursor
 import bolts.CancellationToken
 import bolts.Task
-import com.example.RickAndMortyTest.App
-import com.example.RickAndMortyTest.data.CharactersInfo
-import com.example.RickAndMortyTest.data.CharactersResponse
-import com.example.RickAndMortyTest.data.ColumnIndexForDb
-import com.example.RickAndMortyTest.data.Origin
-import com.example.RickAndMortyTest.helpers.InsertDBHelper
-import com.example.RickAndMortyTest.helpers.SelectDbHelper
+import com.example.ric_an_morty_test.utils.App
+import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.data.CharactersResponse
+import com.example.ric_an_morty_test.data.ColumnIndexForDb
+import com.example.ric_an_morty_test.data.Origin
+import com.example.ric_an_morty_test.helpers.InsertDBHelper
+import com.example.ric_an_morty_test.helpers.SelectDbHelper
 import java.util.*
 
 class CharacterRepository {

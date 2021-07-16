@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest.helpers
+package com.example.ric_an_morty_test.helpers
 
 import android.database.sqlite.SQLiteDatabase
 
@@ -18,10 +18,8 @@ class InsertDBHelper {
     }
 
     fun insertTheValues(db: SQLiteDatabase) {
-        var selectedFields = ""
-        var values = ""
-        selectedFields = selectedFieldsInTable.keys.joinToString()
-        values = selectedFieldsInTable.values.joinToString()
+        val selectedFields = selectedFieldsInTable.keys.joinToString()
+        val values = selectedFieldsInTable.values.joinToString()
         val statement =
             db.compileStatement("INSERT INTO $tableName ($selectedFields) VALUES ($values)")
         statement.bindString(0, selectedFields)

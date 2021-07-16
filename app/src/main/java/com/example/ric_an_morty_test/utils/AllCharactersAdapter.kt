@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest
+package com.example.ric_an_morty_test.utils
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +11,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.RickAndMortyTest.data.CharactersInfo
-import com.example.RickAndMortyTest.data.PaginationFooter
+import com.example.ric_an_morty_test.R
+import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.data.PaginationFooter
 
 class AllCharactersAdapter(
     private val allCharactersList: List<CharactersInfo>,

@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest.screens
+package com.example.ric_an_morty_test.screens
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import bolts.CancellationTokenSource
 import bolts.Task
-import com.example.RickAndMortyTest.AllCharactersAdapter
-import com.example.RickAndMortyTest.App
-import com.example.RickAndMortyTest.R
-import com.example.RickAndMortyTest.data.CharactersInfo
-import com.example.RickAndMortyTest.data.CharactersResponse
+import com.example.ric_an_morty_test.utils.AllCharactersAdapter
+import com.example.ric_an_morty_test.utils.App
+import com.example.ric_an_morty_test.R
+import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.data.CharactersResponse
 
 
 class AllCharactersListFragment : Fragment() {

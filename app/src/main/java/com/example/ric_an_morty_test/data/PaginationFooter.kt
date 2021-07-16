@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest.data
+package com.example.ric_an_morty_test.data
 
 data class PaginationFooter(
     var isEndOfPages: Boolean,

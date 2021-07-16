@@ -1,6 +1,6 @@
-package com.example.RickAndMortyTest.retrofit
+package com.example.ric_an_morty_test.retrofit
 
-import com.example.RickAndMortyTest.data.CharactersResponse
+import com.example.ric_an_morty_test.data.CharactersResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

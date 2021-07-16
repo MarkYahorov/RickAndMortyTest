@@ -1,9 +1,11 @@
-package com.example.RickAndMortyTest
+package com.example.ric_an_morty_test.utils
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.RickAndMortyTest.helpers.CreateDBHelper
+import com.example.ric_an_morty_test.helpers.CreateDBHelper
+import com.example.ric_an_morty_test.screens.RICK_AND_MORTY_DB
+import com.example.ric_an_morty_test.screens.VERSION_DB
 
 class RickAndMortyDataBase(context: Context) :
     SQLiteOpenHelper(context, RICK_AND_MORTY_DB, null, VERSION_DB) {

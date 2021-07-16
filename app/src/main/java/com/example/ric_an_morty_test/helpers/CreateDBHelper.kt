@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest.helpers
+package com.example.ric_an_morty_test.helpers
 
 import android.database.sqlite.SQLiteDatabase
 

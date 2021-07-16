@@ -1,12 +1,12 @@
-package com.example.RickAndMortyTest
+package com.example.ric_an_morty_test.screens
 
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
-import com.example.RickAndMortyTest.data.CharactersInfo
-import com.example.RickAndMortyTest.screens.AllCharactersListFragment
-import com.example.RickAndMortyTest.screens.DetailsFragment
+import com.example.ric_an_morty_test.utils.App
+import com.example.ric_an_morty_test.R
+import com.example.ric_an_morty_test.data.CharactersInfo
 
 const val CURRENT_CHARACTER_FOR_DETAIL_SCREEN = "CURRENT_CHARACTER"
 const val RICK_AND_MORTY_DB = "RICK_AND_MORTY.db"

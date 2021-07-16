@@ -1,18 +1,17 @@
-package com.example.RickAndMortyTest
+package com.example.ric_an_morty_test.utils
 
 import android.app.Application
 import android.database.sqlite.SQLiteDatabase
-import com.example.RickAndMortyTest.data.CharactersInfo
-import com.example.RickAndMortyTest.data.Origin
-import com.example.RickAndMortyTest.retrofit.CharacterRepository
+import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.data.Origin
+import com.example.ric_an_morty_test.data.State
+import com.example.ric_an_morty_test.retrofit.CharacterRepository
 
 class App : Application() {
 
     val state: State = State()
     lateinit var db: SQLiteDatabase
     val characterRepository: CharacterRepository = CharacterRepository()
-    var isLoading = false
-
     companion object {
         lateinit var INSTANCE: App
     }

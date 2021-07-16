@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest
+package com.example.ric_an_morty_test
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

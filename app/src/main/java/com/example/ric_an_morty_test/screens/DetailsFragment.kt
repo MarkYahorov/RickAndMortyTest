@@ -1,4 +1,4 @@
-package com.example.RickAndMortyTest.screens
+package com.example.ric_an_morty_test.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.RickAndMortyTest.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
-import com.example.RickAndMortyTest.R
-import com.example.RickAndMortyTest.data.CharactersInfo
+import com.example.ric_an_morty_test.R
+import com.example.ric_an_morty_test.data.CharactersInfo
 
 class DetailsFragment : Fragment() {
 
