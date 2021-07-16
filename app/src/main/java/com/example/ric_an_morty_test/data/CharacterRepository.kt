@@ -1,26 +1,27 @@
-package com.example.ric_an_morty_test.retrofit
+package com.example.ric_an_morty_test.data
 
 import android.content.Context
 import android.database.Cursor
 import bolts.CancellationToken
 import bolts.Task
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
-import com.example.ric_an_morty_test.data.CharactersResponse
-import com.example.ric_an_morty_test.data.ColumnIndexForDb
-import com.example.ric_an_morty_test.data.Origin
-import com.example.ric_an_morty_test.helpers.InsertDBHelper
-import com.example.ric_an_morty_test.helpers.SelectDbHelper
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.models.CharactersResponse
+import com.example.ric_an_morty_test.models.ColumnIndexForDb
+import com.example.ric_an_morty_test.models.Origin
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.GENDER
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.ID
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.IMAGE
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.NAME
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.PLANET_NAME
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.SPECIES
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.STATUS
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.TABLE_NAME
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.TYPE
+import com.example.ric_an_morty_test.data.database.helpers.InsertDBHelper
+import com.example.ric_an_morty_test.data.database.helpers.SelectDbHelper
+import com.example.ric_an_morty_test.data.retrofit.RetrofitBuilder
 import com.example.ric_an_morty_test.utils.App
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.GENDER
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.ID
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.IMAGE
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.NAME
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.PLANET_NAME
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.SPECIES
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.STATUS
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.TABLE_NAME
-import com.example.ric_an_morty_test.utils.RickAndMortyDatabase.Companion.TYPE
 import java.util.*
 
 class CharacterRepository {

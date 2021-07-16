@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.data
+package com.example.ric_an_morty_test.models
 
 data class ColumnIndexForDb(
     var id: Int,

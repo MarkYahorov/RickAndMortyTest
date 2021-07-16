@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.screens
+package com.example.ric_an_morty_test.screens.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.screens.main.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
 
 class DetailsFragment : Fragment() {
 

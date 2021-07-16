@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.utils
+package com.example.ric_an_morty_test.screens.allCharacters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
-import com.example.ric_an_morty_test.data.PaginationFooter
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.models.PaginationFooter
 
 class AllCharactersAdapter(
     private val allCharactersList: List<CharactersInfo>,

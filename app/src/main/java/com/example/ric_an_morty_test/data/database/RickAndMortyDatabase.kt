@@ -1,9 +1,9 @@
-package com.example.ric_an_morty_test.utils
+package com.example.ric_an_morty_test.data.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.ric_an_morty_test.helpers.CreateDBHelper
+import com.example.ric_an_morty_test.data.database.helpers.CreateDBHelper
 
 const val RICK_AND_MORTY_DB = "RICK_AND_MORTY.db"
 const val VERSION_DB = 1

@@ -2,8 +2,9 @@ package com.example.ric_an_morty_test.utils
 
 import android.app.Application
 import android.database.sqlite.SQLiteDatabase
-import com.example.ric_an_morty_test.data.State
-import com.example.ric_an_morty_test.retrofit.CharacterRepository
+import com.example.ric_an_morty_test.data.CharacterRepository
+import com.example.ric_an_morty_test.models.State
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase
 
 class App : Application() {
 

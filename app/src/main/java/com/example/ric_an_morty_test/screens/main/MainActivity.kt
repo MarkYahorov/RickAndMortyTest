@@ -1,11 +1,13 @@
-package com.example.ric_an_morty_test.screens
+package com.example.ric_an_morty_test.screens.main
 
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.screens.allCharacters.AllCharactersListFragment
+import com.example.ric_an_morty_test.screens.details.DetailsFragment
 
 const val CURRENT_CHARACTER_FOR_DETAIL_SCREEN = "CURRENT_CHARACTER"
 
