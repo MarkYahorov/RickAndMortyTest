@@ -1,11 +1,9 @@
-package com.example.rickandmortytest.retrofit
+package com.example.RickAndMortyTest.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitBuilder {
-
-    private val BASE_URL = " https://rickandmortyapi.com/api/"
 
     private val retrofit by lazy {
         Retrofit.Builder()
@@ -16,5 +14,9 @@ class RetrofitBuilder {
 
     val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
+    }
+
+    companion object {
+        private const val BASE_URL = " https://rickandmortyapi.com/api/"
     }
 }

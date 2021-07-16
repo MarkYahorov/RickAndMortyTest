@@ -1,4 +1,4 @@
-package com.example.rickandmortytest
+package com.example.RickAndMortyTest
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +11,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.rickandmortytest.data.CharactersInfo
-import com.example.rickandmortytest.data.PaginationFooter
+import com.example.RickAndMortyTest.data.CharactersInfo
+import com.example.RickAndMortyTest.data.PaginationFooter
 
 class AllCharactersAdapter(
     private val allCharactersList: List<CharactersInfo>,
@@ -22,7 +22,7 @@ class AllCharactersAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object{
+    companion object {
         private const val PROGRESS_ITEM_VIEW_TYPE = 1
         private const val CHARACTER_ITEM_VIEW_TYPE = 0
     }
@@ -31,7 +31,8 @@ class AllCharactersAdapter(
         private val item: View,
         private val goToDetailsScreen: (CharactersInfo) -> Unit,
     ) : RecyclerView.ViewHolder(item) {
-        private val currentPhoto = item.findViewById<ImageView>(R.id.current_character_photo_in_holder)
+        private val currentPhoto =
+            item.findViewById<ImageView>(R.id.current_character_photo_in_holder)
         private val currentName = item.findViewById<TextView>(R.id.current_character_name)
 
         fun bind(information: CharactersInfo) {
@@ -45,9 +46,9 @@ class AllCharactersAdapter(
         }
     }
 
-    inner class ProgressHolder(
+    inner class ProgressAndErrorHolder(
         private val item: View,
-        private val startReloading: () -> Unit
+        private val startReloading: () -> Unit,
     ) : RecyclerView.ViewHolder(item) {
 
         private val progress = item.findViewById<ProgressBar>(R.id.loading_progress_in_holder)
@@ -57,25 +58,16 @@ class AllCharactersAdapter(
         fun bind(paginationFooter: PaginationFooter) {
             when {
                 paginationFooter.isEndOfPages -> {
-                    progress.visibility = GONE
-                    errorMessage.visibility = GONE
-                    item.visibility = GONE
-                    reloadingBtn.visibility = GONE
+                    setVisibilityForItems(GONE, GONE, GONE, GONE)
                 }
-                paginationFooter.errorMessage== null -> {
-                    progress.visibility = VISIBLE
-                    errorMessage.visibility = GONE
-                    item.visibility = VISIBLE
-                    reloadingBtn.visibility = GONE
+                paginationFooter.errorMessage == null -> {
+                    setVisibilityForItems(VISIBLE, GONE, VISIBLE, GONE)
                 }
                 else -> {
-                    progress.visibility = GONE
-                    errorMessage.visibility = VISIBLE
-                    item.visibility = VISIBLE
-                    reloadingBtn.visibility = VISIBLE
+                    setVisibilityForItems(GONE, VISIBLE, VISIBLE, VISIBLE)
                     errorMessage.text = paginationFooter.errorMessage
                     reloadingBtn.setOnClickListener {
-                        startReloading
+                        startReloading()
                     }
                 }
             }
@@ -83,6 +75,18 @@ class AllCharactersAdapter(
 
         fun unbind() {
             reloadingBtn.setOnClickListener(null)
+        }
+
+        private fun setVisibilityForItems(
+            progressVisibility: Int,
+            errorMessageVisibility: Int,
+            itemVisibility: Int,
+            btnVisibility: Int,
+        ) {
+            progress.visibility = progressVisibility
+            errorMessage.visibility = errorMessageVisibility
+            item.visibility = itemVisibility
+            reloadingBtn.visibility = btnVisibility
         }
     }
 
@@ -107,7 +111,7 @@ class AllCharactersAdapter(
                 parent,
                 false
             )
-            ProgressHolder(progress,startReloading)
+            ProgressAndErrorHolder(progress, startReloading)
         }
     }
 
@@ -115,19 +119,19 @@ class AllCharactersAdapter(
         if (holder.itemViewType == CHARACTER_ITEM_VIEW_TYPE) {
             (holder as CurrentCharacterHolder).bind(allCharactersList[position])
         } else {
-            (holder as ProgressHolder).bind(paginationFooter)
+            (holder as ProgressAndErrorHolder).bind(paginationFooter)
         }
     }
 
-//    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-//        super.onViewRecycled(holder)
-//        if (holder.itemViewType == PROGRESS_ITEM_VIEW_TYPE ){
-//            (holder as ProgressHolder).unbind()
-//        } else {
-//            (holder as CurrentCharacterHolder).unbind()
-//        }
-//    }
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder.itemViewType == PROGRESS_ITEM_VIEW_TYPE) {
+            (holder as ProgressAndErrorHolder).unbind()
+        } else {
+            (holder as CurrentCharacterHolder).unbind()
+        }
+    }
 
-    override fun getItemCount(): Int = allCharactersList.size+1
+    override fun getItemCount(): Int = allCharactersList.size + 1
 
 }

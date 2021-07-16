@@ -1,15 +1,16 @@
-package com.example.rickandmortytest
+package com.example.RickAndMortyTest
 
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
-import com.example.rickandmortytest.data.CharactersInfo
-import com.example.rickandmortytest.data.Origin
-import com.example.rickandmortytest.screens.AllCharactersListFragment
-import com.example.rickandmortytest.screens.DetailsFragment
+import com.example.RickAndMortyTest.data.CharactersInfo
+import com.example.RickAndMortyTest.screens.AllCharactersListFragment
+import com.example.RickAndMortyTest.screens.DetailsFragment
 
 const val CURRENT_CHARACTER_FOR_DETAIL_SCREEN = "CURRENT_CHARACTER"
+const val RICK_AND_MORTY_DB = "RICK_AND_MORTY.db"
+const val VERSION_DB = 1
 
 class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNavigator {
 
@@ -19,45 +20,41 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
         private const val BACK_STACK_LIST = "LIST"
     }
 
-    private var charactersInfoSuper: CharactersInfo = CharactersInfo(1,
-        "",
-        "",
-        "",
-        Origin(""),
-        "",
-        "",
-        "")
+    private var charactersInfoSuper: CharactersInfo = App.INSTANCE.createEmptyCharacter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val charactersInfo =
-            savedInstanceState?.getParcelable<CharactersInfo>(CURRENT_CHARACTER_THIS)
-        if (savedInstanceState == null) {
-            setFragment()
-        } else {
-            setDetailsFragment(charactersInfo)
-        }
-    }
 
-    private fun setFragment() {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            addFragment()
-        }
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            addFragment()
+        if (savedInstanceState == null) {
+            addListFragment()
+        } else {
+            charactersInfoSuper =
+                savedInstanceState.getParcelable(CURRENT_CHARACTER_THIS)!!
+
+            setDetailsFragment(charactersInfoSuper)
         }
     }
 
     private fun setDetailsFragment(charactersInfo: CharactersInfo?) {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (supportFragmentManager.popBackStackImmediate(BACK_STACK_DETAILS, POP_BACK_STACK_INCLUSIVE)){
-                replaceFragment(R.id.fragment_container, charactersInfo!!)
-            }
-        }
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (supportFragmentManager.popBackStackImmediate(BACK_STACK_DETAILS, POP_BACK_STACK_INCLUSIVE)){
-                replaceFragment(R.id.details_container, charactersInfo!!)
+        replaceFragmentOfCertainConfiguration(Configuration.ORIENTATION_PORTRAIT,
+            R.id.fragment_container,
+            charactersInfo)
+        replaceFragmentOfCertainConfiguration(Configuration.ORIENTATION_LANDSCAPE,
+            R.id.details_container,
+            charactersInfo)
+    }
+
+    private fun replaceFragmentOfCertainConfiguration(
+        orientation: Int,
+        idContainer: Int,
+        charactersInfo: CharactersInfo?,
+    ) {
+        if (resources.configuration.orientation == orientation) {
+            if (supportFragmentManager.popBackStackImmediate(BACK_STACK_DETAILS,
+                    POP_BACK_STACK_INCLUSIVE) && charactersInfo != null
+            ) {
+                replaceFragment(idContainer, charactersInfo)
             }
         }
     }
@@ -71,7 +68,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
         }
     }
 
-    private fun addFragment() {
+    private fun addListFragment() {
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, AllCharactersListFragment())
@@ -111,10 +108,5 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(CURRENT_CHARACTER_THIS, charactersInfoSuper)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        charactersInfoSuper = savedInstanceState.getParcelable(CURRENT_CHARACTER_THIS)!!
     }
 }

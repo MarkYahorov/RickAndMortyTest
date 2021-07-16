@@ -1,4 +1,4 @@
-package com.example.rickandmortytest.data
+package com.example.RickAndMortyTest.data
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -9,17 +9,17 @@ data class CharactersInfo(
     @SerializedName("id")
     var id: Int,
     @SerializedName("name")
-    val name: String,
+    var name: String,
     @SerializedName("status")
-    val status: String,
+    var status: String,
     @SerializedName("species")
-    val species: String,
+    var species: String,
     @SerializedName("origin")
     val origin: Origin,
     @SerializedName("image")
-    val image: String,
+    var image: String,
     @SerializedName("gender")
-    val gender: String,
+    var gender: String,
     @SerializedName("type")
-    val type: String
+    var type: String,
 ) : Parcelable

@@ -1,4 +1,4 @@
-package com.example.rickandmortytest.screens
+package com.example.RickAndMortyTest.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.rickandmortytest.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
-import com.example.rickandmortytest.R
-import com.example.rickandmortytest.data.CharactersInfo
+import com.example.RickAndMortyTest.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
+import com.example.RickAndMortyTest.R
+import com.example.RickAndMortyTest.data.CharactersInfo
 
 class DetailsFragment : Fragment() {
 
@@ -27,11 +27,11 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_details, container, false)
-        initAll(view)
+        initAllViews(view)
         return view
     }
 
-    private fun initAll(view: View){
+    private fun initAllViews(view: View) {
         currentPhoto = view.findViewById(R.id.current_character_photo)
         currentName = view.findViewById(R.id.current_character_name_in_details)
         currentStatus = view.findViewById(R.id.current_status)
@@ -43,18 +43,19 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val b = arguments?.getParcelable<CharactersInfo>(CURRENT_CHARACTER_FOR_DETAIL_SCREEN)
-        if (b!=null) {
-            getInfoAboutCharacter(b)
+        val currentCharacter =
+            arguments?.getParcelable<CharactersInfo>(CURRENT_CHARACTER_FOR_DETAIL_SCREEN)
+        if (currentCharacter != null) {
+            getInfoAboutCharacter(currentCharacter)
         }
     }
 
-    private fun getInfoAboutCharacter(currentInfo: CharactersInfo){
+    private fun getInfoAboutCharacter(currentInfo: CharactersInfo) {
         Glide.with(currentPhoto.context).load(currentInfo.image).into(currentPhoto)
         currentName.text = currentInfo.name
         currentStatus.text = currentInfo.status
         currentSpecies.text = currentInfo.species
-        if (currentInfo.type!="") {
+        if (currentInfo.type != "") {
             currentType.text = currentInfo.type
         } else {
             currentType.text = getString(R.string.current_character_type_if_null)
