@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="current_character_photo_size">70dp</dimen>
+    <dimen name="current_character_item_height">90dp</dimen>
+
+    <dimen name="recycler_view_item_progress_margin">16dp</dimen>
+    <dimen name="recycler_view_item_character_margin">30dp</dimen>
+
+    <dimen name="details_fragment_image_size_port_orient">250dp</dimen>
+    <dimen name="details_fragment_margin_port_orient">25dp</dimen>
+    <dimen name="details_fragment_margin_bottom_last_text_port_orient">100dp</dimen>
+
+    <dimen name="details_fragment_image_size_land_orient">250dp</dimen>
+    <dimen name="details_fragment_margin_land_orient">15dp</dimen>
+    <dimen name="details_fragment_margin_bottom_last_text_land_orient">50dp</dimen>
+</resources>

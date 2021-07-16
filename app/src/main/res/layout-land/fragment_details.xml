@@ -10,22 +10,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/current_character_photo"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/details_fragment_image_size_land_orient"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="fitXY"
+        style="@style/dialog_fragment_image_scale"
         tools:src="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/current_character_name_in_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        style="@style/Dialog_fragment_text_margin_land_orient"
         app:layout_constraintBottom_toTopOf="@+id/current_status"
         app:layout_constraintEnd_toEndOf="@+id/current_character_photo"
         app:layout_constraintStart_toStartOf="@+id/current_character_photo"
@@ -36,7 +36,7 @@
         android:id="@+id/current_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        style="@style/Dialog_fragment_text_margin_land_orient"
         app:layout_constraintBottom_toTopOf="@+id/current_species"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:id="@+id/current_species"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        style="@style/Dialog_fragment_text_margin_land_orient"
         app:layout_constraintBottom_toTopOf="@+id/current_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
         android:id="@+id/current_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        style="@style/Dialog_fragment_text_margin_land_orient"
         app:layout_constraintBottom_toTopOf="@+id/current_gender"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
         android:id="@+id/current_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        style="@style/Dialog_fragment_text_margin_land_orient"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/current_name_of_planet"
@@ -76,8 +76,7 @@
         android:id="@+id/current_name_of_planet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_marginBottom="50dp"
+        style="@style/Dialog_fragment_text_margin_land_orient.last_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

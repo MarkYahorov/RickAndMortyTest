@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="@dimen/current_character_item_height">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/current_character_photo_in_holder"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="30dp"
+        android:layout_width="@dimen/current_character_photo_size"
+        android:layout_height="@dimen/current_character_photo_size"
+        style="@style/recycler_view_item_with_character"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/barrier2"
         app:layout_constraintStart_toStartOf="parent"
