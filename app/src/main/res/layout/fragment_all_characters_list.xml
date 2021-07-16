@@ -21,7 +21,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/first_progress_bar" />
 
-
         <ProgressBar
             android:id="@+id/second_progress"
             style="?android:attr/progressBarStyleHorizontal"

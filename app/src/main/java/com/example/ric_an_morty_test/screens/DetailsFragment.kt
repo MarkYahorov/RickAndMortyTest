@@ -21,6 +21,10 @@ class DetailsFragment : Fragment() {
     private lateinit var currentGender: TextView
     private lateinit var currentPlanetName: TextView
 
+    companion object {
+        private const val EMPTY_STRING = ""
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -54,7 +58,7 @@ class DetailsFragment : Fragment() {
         currentName.text = currentInfo.name
         currentStatus.text = currentInfo.status
         currentSpecies.text = currentInfo.species
-        if (currentInfo.type != "") {
+        if (currentInfo.type != EMPTY_STRING) {
             currentType.text = currentInfo.type
         } else {
             currentType.text = getString(R.string.current_character_type_if_null)

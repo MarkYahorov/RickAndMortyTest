@@ -19,11 +19,17 @@ class InsertDBHelper {
 
     fun insertTheValues(db: SQLiteDatabase) {
         val selectedFields = selectedFieldsInTable.keys.joinToString()
-        val values = selectedFieldsInTable.values.joinToString()
+        val questionList = mutableListOf<String>()
+        val size = selectedFieldsInTable.size
+        while (questionList.size!= size){
+            questionList.add("?")
+        }
+        val stringBuilderForQuestion = questionList.joinToString()
         val statement =
-            db.compileStatement("INSERT INTO $tableName ($selectedFields) VALUES ($values)")
-        statement.bindString(0, selectedFields)
-        statement.bindString(1, values)
+            db.compileStatement("INSERT INTO $tableName ($selectedFields) VALUES ($stringBuilderForQuestion)")
+        selectedFieldsInTable.values.forEachIndexed { index, s ->
+            statement.bindString(index+1, s)
+        }
         statement.execute()
     }
 }

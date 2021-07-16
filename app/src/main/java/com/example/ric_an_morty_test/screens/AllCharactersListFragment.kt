@@ -25,7 +25,6 @@ import com.example.ric_an_morty_test.data.CharactersResponse
 
 class AllCharactersListFragment : Fragment() {
 
-
     private lateinit var allCharactersRecyclerView: RecyclerView
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var progressBarFirst: ProgressBar
@@ -40,6 +39,11 @@ class AllCharactersListFragment : Fragment() {
 
     private var navigator: OpenDetailNavigator? = null
 
+    companion object{
+        private const val DURATION_FOR_PROGRESS_ANIMATOR = 5000L
+        private const val REPEAT_COUNT = 3
+        private const val PROPERTY_NAME = "progress"
+    }
 
     interface OpenDetailNavigator {
         fun navigate(currentCharactersInfo: CharactersInfo)
@@ -64,7 +68,7 @@ class AllCharactersListFragment : Fragment() {
         swipeLayout = view.findViewById(R.id.swipe_layout)
         progressBarFirst = view.findViewById(R.id.first_progress_bar)
         progressBarSecond = view.findViewById(R.id.second_progress)
-        progressAnimator = ObjectAnimator.ofInt(progressBarSecond, "progress", 0, 100)
+        progressAnimator = ObjectAnimator.ofInt(progressBarSecond, PROPERTY_NAME, 0, 100)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,26 +76,24 @@ class AllCharactersListFragment : Fragment() {
 
         initRecycler()
         if (state.page == 1) {
-            characterRepository.getRequestFromDb(cancellationTokenSource.token)
+            characterRepository.getListCharactersFromDb(cancellationTokenSource.token)
                 .continueWith({ task ->
                     processResponseFromDb(task)
-                }, Task.BACKGROUND_EXECUTOR, cancellationTokenSource.token)
-                .continueWith({
-                    createAnimationForProgressBar().start()
                     notifyAdapter()
                     loadCharacters(false)
-                }, Task.UI_THREAD_EXECUTOR, cancellationTokenSource.token)
+                }, Task.UI_THREAD_EXECUTOR)
         }
     }
 
     private fun processResponseFromDb(task: Task<List<CharactersInfo>>) {
         if (task.error != null || task.result.isEmpty()) {
             progressBarSecond.isVisible = true
+            defineObjectAnimator().start()
         } else if (!task.result.isNullOrEmpty()) {
             oldSizeOfListCharacters = state.list.size
             state.list.addAll(task.result)
-            changePaginationFooter(false, null)
             progressBarFirst.isVisible = true
+            changePaginationFooter(false, null)
         }
     }
 
@@ -101,10 +103,10 @@ class AllCharactersListFragment : Fragment() {
         addScrollListener()
     }
 
-    private fun createAnimationForProgressBar(): ObjectAnimator {
-        progressAnimator.duration = 5000L
+    private fun defineObjectAnimator(): ObjectAnimator {
+        progressAnimator.duration = DURATION_FOR_PROGRESS_ANIMATOR
         progressAnimator.interpolator = LinearInterpolator()
-        progressAnimator.repeatCount = 3
+        progressAnimator.repeatCount = REPEAT_COUNT
         return progressAnimator
     }
 
@@ -116,12 +118,14 @@ class AllCharactersListFragment : Fragment() {
                 state.list.clear()
                 state.page = 1
             }
-            characterRepository.getServerRequest(state.page, cancellationTokenSource.token)
+            characterRepository.getServerResponse(state.page, cancellationTokenSource.token)
                 .continueWith({
                     processRequestFromServer(it)
                 }, Task.BACKGROUND_EXECUTOR, cancellationTokenSource.token)
                 .continueWith({
                     notifyAdapter()
+                    progressBarFirst.isVisible = false
+                    progressBarSecond.isVisible = false
                 }, Task.UI_THREAD_EXECUTOR, cancellationTokenSource.token)
         } else {
             swipeLayout.isRefreshing = false
@@ -136,11 +140,9 @@ class AllCharactersListFragment : Fragment() {
         } else {
             notifyInsertAdapter()
         }
-        if (createAnimationForProgressBar().isRunning) {
-            createAnimationForProgressBar().removeAllListeners()
+        if (progressAnimator.isRunning) {
+            progressAnimator.cancel()
         }
-        progressBarFirst.isVisible = false
-        progressBarSecond.isVisible = false
         swipeLayout.isRefreshing = false
         isLoading = false
     }
@@ -222,9 +224,9 @@ class AllCharactersListFragment : Fragment() {
     }
 
     override fun onStop() {
-        super.onStop()
         swipeLayout.setOnRefreshListener(null)
         allCharactersRecyclerView.clearOnScrollListeners()
+        super.onStop()
     }
 
     override fun onDestroyView() {

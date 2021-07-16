@@ -2,8 +2,6 @@ package com.example.ric_an_morty_test.utils
 
 import android.app.Application
 import android.database.sqlite.SQLiteDatabase
-import com.example.ric_an_morty_test.data.CharactersInfo
-import com.example.ric_an_morty_test.data.Origin
 import com.example.ric_an_morty_test.data.State
 import com.example.ric_an_morty_test.retrofit.CharacterRepository
 
@@ -20,17 +18,6 @@ class App : Application() {
         super.onCreate()
 
         INSTANCE = this
-        db = RickAndMortyDataBase(this).writableDatabase
-    }
-
-    fun createEmptyCharacter(): CharactersInfo {
-        return CharactersInfo(1,
-            "",
-            "",
-            "",
-            Origin(""),
-            "",
-            "",
-            "")
+        db = RickAndMortyDatabase(this).writableDatabase
     }
 }

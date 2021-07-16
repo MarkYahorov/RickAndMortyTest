@@ -4,13 +4,11 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
-import com.example.ric_an_morty_test.utils.App
 import com.example.ric_an_morty_test.R
 import com.example.ric_an_morty_test.data.CharactersInfo
 
 const val CURRENT_CHARACTER_FOR_DETAIL_SCREEN = "CURRENT_CHARACTER"
-const val RICK_AND_MORTY_DB = "RICK_AND_MORTY.db"
-const val VERSION_DB = 1
+
 
 class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNavigator {
 
@@ -18,9 +16,10 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
         private const val CURRENT_CHARACTER_THIS = "CURRENT_CHARACTER_THIS"
         private const val BACK_STACK_DETAILS = "DETAILS"
         private const val BACK_STACK_LIST = "LIST"
+        private const val TAG_DETAILS_FRAGMENT = "TAG_DETAILS_FRAGMENT"
     }
 
-    private var charactersInfoSuper: CharactersInfo = App.INSTANCE.createEmptyCharacter()
+    private var charactersInfoSuper: CharactersInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
             addListFragment()
         } else {
             charactersInfoSuper =
-                savedInstanceState.getParcelable(CURRENT_CHARACTER_THIS)!!
+                savedInstanceState.getParcelable(CURRENT_CHARACTER_THIS)
 
             setDetailsFragment(charactersInfoSuper)
         }
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
         detailsFragment.arguments = bundle
         supportFragmentManager
             .beginTransaction()
-            .replace(containerId, detailsFragment, "DetailsFragment")
+            .replace(containerId, detailsFragment, TAG_DETAILS_FRAGMENT)
             .addToBackStack(BACK_STACK_DETAILS)
             .commit()
     }
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
                 finish()
             }
             if (supportFragmentManager.backStackEntryCount > 1) {
-                supportFragmentManager.popBackStack("BACK_STACK_DETAILS",
+                supportFragmentManager.popBackStack(BACK_STACK_DETAILS,
                     POP_BACK_STACK_INCLUSIVE)
             }
         } else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {

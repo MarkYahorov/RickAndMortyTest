@@ -32,6 +32,7 @@ class AllCharactersAdapter(
         private val item: View,
         private val goToDetailsScreen: (CharactersInfo) -> Unit,
     ) : RecyclerView.ViewHolder(item) {
+
         private val currentPhoto =
             item.findViewById<ImageView>(R.id.current_character_photo_in_holder)
         private val currentName = item.findViewById<TextView>(R.id.current_character_name)
@@ -134,5 +135,4 @@ class AllCharactersAdapter(
     }
 
     override fun getItemCount(): Int = allCharactersList.size + 1
-
 }
