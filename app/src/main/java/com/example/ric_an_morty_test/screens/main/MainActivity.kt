@@ -33,39 +33,39 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
             charactersInfoSuper =
                 savedInstanceState.getParcelable(CURRENT_CHARACTER_THIS)
 
-            setDetailsFragment(charactersInfoSuper)
+            checkConfiguration(charactersInfoSuper)
         }
     }
 
-    private fun setDetailsFragment(charactersInfo: CharactersInfo?) {
-        replaceFragmentOfCertainConfiguration(Configuration.ORIENTATION_PORTRAIT,
-            R.id.fragment_container,
-            charactersInfo)
-        replaceFragmentOfCertainConfiguration(Configuration.ORIENTATION_LANDSCAPE,
-            R.id.details_container,
-            charactersInfo)
+    private fun checkConfiguration(charactersInfo: CharactersInfo?) {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            checkDetailsTransactionInBackStack(
+                R.id.fragment_container,
+                charactersInfo)
+        else
+            checkDetailsTransactionInBackStack(
+                R.id.details_container,
+                charactersInfo)
+
     }
 
-    private fun replaceFragmentOfCertainConfiguration(
-        orientation: Int,
+    private fun checkDetailsTransactionInBackStack(
         idContainer: Int,
         charactersInfo: CharactersInfo?,
     ) {
-        if (resources.configuration.orientation == orientation) {
-            if (supportFragmentManager.popBackStackImmediate(BACK_STACK_DETAILS,
-                    POP_BACK_STACK_INCLUSIVE) && charactersInfo != null
-            ) {
-                replaceFragment(idContainer, charactersInfo)
-            }
+        if (supportFragmentManager.popBackStackImmediate(BACK_STACK_DETAILS,
+                POP_BACK_STACK_INCLUSIVE) && charactersInfo != null
+        ) {
+            replaceDetailsFragment(idContainer, charactersInfo)
         }
     }
 
     override fun navigate(currentCharactersInfo: CharactersInfo) {
         charactersInfoSuper = currentCharactersInfo
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            replaceFragment(R.id.fragment_container, currentCharactersInfo)
+            replaceDetailsFragment(R.id.fragment_container, currentCharactersInfo)
         } else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            replaceFragment(R.id.details_container, currentCharactersInfo)
+            replaceDetailsFragment(R.id.details_container, currentCharactersInfo)
         }
     }
 
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
             .commit()
     }
 
-    private fun replaceFragment(containerId: Int, charactersInfo: CharactersInfo) {
+    private fun replaceDetailsFragment(containerId: Int, charactersInfo: CharactersInfo) {
         supportFragmentManager.popBackStack(BACK_STACK_DETAILS, POP_BACK_STACK_INCLUSIVE)
         val detailsFragment = DetailsFragment()
         val bundle = Bundle()
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), AllCharactersListFragment.OpenDetailNa
                 finish()
             }
             if (supportFragmentManager.backStackEntryCount > 1) {
-                supportFragmentManager.popBackStack(BACK_STACK_DETAILS,
+                supportFragmentManager.popBackStack("",
                     POP_BACK_STACK_INCLUSIVE)
             }
         } else if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {

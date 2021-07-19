@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import bolts.CancellationTokenSource
 import bolts.Task
-import com.example.ric_an_morty_test.utils.App
 import com.example.ric_an_morty_test.R
 import com.example.ric_an_morty_test.models.CharactersInfo
 import com.example.ric_an_morty_test.models.CharactersResponse
+import com.example.ric_an_morty_test.utils.App
 
 
 class AllCharactersListFragment : Fragment() {
@@ -30,7 +30,7 @@ class AllCharactersListFragment : Fragment() {
     private lateinit var progressBarSecond: ProgressBar
     private lateinit var progressAnimator: ObjectAnimator
 
-    private val characterRepository = App.INSTANCE.characterRepository
+    private val characterRepositoryImpl = App.INSTANCE.repo
     private val cancellationTokenSource = CancellationTokenSource()
     private var oldSizeOfListCharacters = 0
     private var state = App.INSTANCE.state
@@ -75,7 +75,7 @@ class AllCharactersListFragment : Fragment() {
 
         initRecycler()
         if (state.page == 1) {
-            characterRepository.getListCharactersFromDb(cancellationTokenSource.token)
+            characterRepositoryImpl.getCachedCharacters(cancellationTokenSource.token)
                 .continueWith({ task ->
                     processResponseFromDb(task)
                     notifyAdapter()
@@ -117,9 +117,9 @@ class AllCharactersListFragment : Fragment() {
                 state.list.clear()
                 state.page = 1
             }
-            characterRepository.getServerResponse(state.page, cancellationTokenSource.token)
+            characterRepositoryImpl.getCharacters(state.page, cancellationTokenSource.token)
                 .continueWith({
-                    processRequestFromServer(it)
+                    processResponseFromServer(it)
                 }, Task.BACKGROUND_EXECUTOR, cancellationTokenSource.token)
                 .continueWith({
                     notifyAdapter()
@@ -165,7 +165,7 @@ class AllCharactersListFragment : Fragment() {
         state.paginationFooter.errorMessage = errorMessage
     }
 
-    private fun processRequestFromServer(characterResponse: Task<CharactersResponse>) {
+    private fun processResponseFromServer(characterResponse: Task<CharactersResponse>) {
         when {
             characterResponse.error != null -> {
                 changePaginationFooter(false, characterResponse.error.message)
@@ -180,9 +180,6 @@ class AllCharactersListFragment : Fragment() {
                 }
                 state.list.addAll(characterResponse.result.characters)
                 ++state.page
-                if (characterResponse.result.info.prev == null) {
-                    characterRepository.insertFirstPageInDB(requireContext(), state.list)
-                }
                 changePaginationFooter(false, null)
             }
         }

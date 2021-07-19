@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RickAndMortyTest">
-        <activity android:name="com.example.ric_an_morty_test.screens.MainActivity">
+        <activity android:name="com.example.ric_an_morty_test.screens.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
