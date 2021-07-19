@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="recycler_view_item_with_progress_margin">
+        <item name="android:layout_margin">@dimen/recycler_view_item_progress_margin</item>
+    </style>
+
+    <style name="recycler_view_item_with_character">
+        <item name="android:layout_marginStart">@dimen/recycler_view_item_character_margin</item>
+    </style>
+
+    <style name="Dialog_fragment_text_margin_port_orient">
+        <item name="android:layout_margin">@dimen/details_fragment_margin_port_orient</item>
+    </style>
+
+    <style name="Dialog_fragment_text_margin_port_orient.last_text">
+        <item name="android:layout_marginBottom">@dimen/details_fragment_margin_bottom_last_text_port_orient</item>
+    </style>
+
+    <style name="dialog_fragment_image_scale">
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="Dialog_fragment_text_margin_land_orient">
+        <item name="android:layout_margin">@dimen/details_fragment_margin_land_orient</item>
+    </style>
+
+    <style name="Dialog_fragment_text_margin_land_orient.last_text">
+        <item name="android:layout_marginBottom">@dimen/details_fragment_margin_bottom_last_text_land_orient</item>
+    </style>
+</resources>

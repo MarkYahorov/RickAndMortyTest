@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="current_character_name">Current character name</string>
     <string name="current_character_status">Current character status</string>
+    <string name="current_character_type_if_null">WE DO NOT KNOW</string>
+    <string name="error_message">Error Message</string>
+    <string name="reloading_btn_text">Reload</string>
 </resources>
