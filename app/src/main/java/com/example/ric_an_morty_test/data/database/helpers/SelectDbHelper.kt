@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.helpers
+package com.example.ric_an_morty_test.data.database.helpers
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase

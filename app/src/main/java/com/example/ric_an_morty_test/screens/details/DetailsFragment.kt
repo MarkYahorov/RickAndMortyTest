@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.screens
+package com.example.ric_an_morty_test.screens.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.screens.main.CURRENT_CHARACTER_FOR_DETAIL_SCREEN
 
 class DetailsFragment : Fragment() {
 
@@ -20,6 +21,10 @@ class DetailsFragment : Fragment() {
     private lateinit var currentType: TextView
     private lateinit var currentGender: TextView
     private lateinit var currentPlanetName: TextView
+
+    companion object {
+        private const val EMPTY_STRING = ""
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +59,7 @@ class DetailsFragment : Fragment() {
         currentName.text = currentInfo.name
         currentStatus.text = currentInfo.status
         currentSpecies.text = currentInfo.species
-        if (currentInfo.type != "") {
+        if (currentInfo.type != EMPTY_STRING) {
             currentType.text = currentInfo.type
         } else {
             currentType.text = getString(R.string.current_character_type_if_null)

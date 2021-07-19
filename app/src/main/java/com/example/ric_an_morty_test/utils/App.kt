@@ -2,16 +2,17 @@ package com.example.ric_an_morty_test.utils
 
 import android.app.Application
 import android.database.sqlite.SQLiteDatabase
-import com.example.ric_an_morty_test.data.CharactersInfo
-import com.example.ric_an_morty_test.data.Origin
-import com.example.ric_an_morty_test.data.State
-import com.example.ric_an_morty_test.retrofit.CharacterRepository
+import com.example.ric_an_morty_test.data.CharacterRepository
+import com.example.ric_an_morty_test.data.CharacterRepositoryImpl
+import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase
+import com.example.ric_an_morty_test.models.State
 
 class App : Application() {
 
     val state: State = State()
     lateinit var db: SQLiteDatabase
-    val characterRepository: CharacterRepository = CharacterRepository()
+    val repo: CharacterRepository = CharacterRepositoryImpl()
+
     companion object {
         lateinit var INSTANCE: App
     }
@@ -20,17 +21,6 @@ class App : Application() {
         super.onCreate()
 
         INSTANCE = this
-        db = RickAndMortyDataBase(this).writableDatabase
-    }
-
-    fun createEmptyCharacter(): CharactersInfo {
-        return CharactersInfo(1,
-            "",
-            "",
-            "",
-            Origin(""),
-            "",
-            "",
-            "")
+        db = RickAndMortyDatabase(this).writableDatabase
     }
 }

@@ -1,6 +1,6 @@
-package com.example.ric_an_morty_test.retrofit
+package com.example.ric_an_morty_test.data.retrofit
 
-import com.example.ric_an_morty_test.data.CharactersResponse
+import com.example.ric_an_morty_test.models.CharactersResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

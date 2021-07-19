@@ -1,4 +1,4 @@
-package com.example.ric_an_morty_test.utils
+package com.example.ric_an_morty_test.screens.allCharacters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ric_an_morty_test.R
-import com.example.ric_an_morty_test.data.CharactersInfo
-import com.example.ric_an_morty_test.data.PaginationFooter
+import com.example.ric_an_morty_test.models.CharactersInfo
+import com.example.ric_an_morty_test.models.PaginationFooter
 
 class AllCharactersAdapter(
     private val allCharactersList: List<CharactersInfo>,
@@ -32,6 +32,7 @@ class AllCharactersAdapter(
         private val item: View,
         private val goToDetailsScreen: (CharactersInfo) -> Unit,
     ) : RecyclerView.ViewHolder(item) {
+
         private val currentPhoto =
             item.findViewById<ImageView>(R.id.current_character_photo_in_holder)
         private val currentName = item.findViewById<TextView>(R.id.current_character_name)
@@ -134,5 +135,4 @@ class AllCharactersAdapter(
     }
 
     override fun getItemCount(): Int = allCharactersList.size + 1
-
 }

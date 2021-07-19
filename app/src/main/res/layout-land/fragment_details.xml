@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.DetailsFragment"
+    tools:context=".screens.details.DetailsFragment"
     android:background="@color/white"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/current_character_photo"
         android:layout_width="match_parent"
