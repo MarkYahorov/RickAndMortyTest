@@ -1,10 +1,11 @@
-package com.example.ric_an_morty_test.data
+package com.example.ric_an_morty_test.data.repository
 
 import android.content.Context
 import android.database.Cursor
 import bolts.CancellationToken
 import bolts.Task
 import com.example.ric_an_morty_test.R
+import com.example.ric_an_morty_test.data.retrofit.CharacterRepository
 import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.GENDER
 import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.ID
 import com.example.ric_an_morty_test.data.database.RickAndMortyDatabase.Companion.IMAGE

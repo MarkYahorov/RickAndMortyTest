@@ -5,4 +5,6 @@ data class State(
     val paginationFooter: PaginationFooter = PaginationFooter(true, null),
     var page: Int = 1,
     var isLoading: Boolean = false,
+    var oldSizeListCharacters: Int = 0,
+    var isSpoiledDb: Boolean? = null
 )

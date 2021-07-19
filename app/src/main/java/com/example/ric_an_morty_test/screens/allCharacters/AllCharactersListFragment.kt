@@ -14,15 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import bolts.CancellationTokenSource
 import bolts.Task
 import com.example.ric_an_morty_test.R
 import com.example.ric_an_morty_test.models.CharactersInfo
 import com.example.ric_an_morty_test.models.CharactersResponse
+import com.example.ric_an_morty_test.presentor.MainContract
+import com.example.ric_an_morty_test.presentor.MainPresenter
 import com.example.ric_an_morty_test.utils.App
 
 
-class AllCharactersListFragment : Fragment() {
+class AllCharactersListFragment : Fragment(), MainContract.ViewCharactersList {
 
     private lateinit var allCharactersRecyclerView: RecyclerView
     private lateinit var swipeLayout: SwipeRefreshLayout
@@ -30,15 +31,13 @@ class AllCharactersListFragment : Fragment() {
     private lateinit var progressBarSecond: ProgressBar
     private lateinit var progressAnimator: ObjectAnimator
 
-    private val characterRepositoryImpl = App.INSTANCE.repo
-    private val cancellationTokenSource = CancellationTokenSource()
+    private val mainPresenter = MainPresenter()
     private var oldSizeOfListCharacters = 0
     private var state = App.INSTANCE.state
-    private var isLoading = false
 
     private var navigator: OpenDetailNavigator? = null
 
-    companion object{
+    companion object {
         private const val DURATION_FOR_PROGRESS_ANIMATOR = 5000L
         private const val REPEAT_COUNT = 3
         private const val PROPERTY_NAME = "progress"
@@ -58,6 +57,7 @@ class AllCharactersListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_all_characters_list, container, false)
+        mainPresenter.attach(this)
         initAll(view)
         return view
     }
@@ -72,28 +72,8 @@ class AllCharactersListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecycler()
-        if (state.page == 1) {
-            characterRepositoryImpl.getCachedCharacters(cancellationTokenSource.token)
-                .continueWith({ task ->
-                    processResponseFromDb(task)
-                    notifyAdapter()
-                    loadCharacters(false)
-                }, Task.UI_THREAD_EXECUTOR)
-        }
-    }
-
-    private fun processResponseFromDb(task: Task<List<CharactersInfo>>) {
-        if (task.error != null || task.result.isEmpty()) {
-            progressBarSecond.isVisible = true
-            defineObjectAnimator().start()
-        } else if (!task.result.isNullOrEmpty()) {
-            oldSizeOfListCharacters = state.list.size
-            state.list.addAll(task.result)
-            progressBarFirst.isVisible = true
-            changePaginationFooter(false, null)
-        }
+        mainPresenter.loadCharacters(false)
     }
 
     override fun onStart() {
@@ -110,79 +90,13 @@ class AllCharactersListFragment : Fragment() {
     }
 
     private fun loadCharacters(isRefresh: Boolean) {
-        if (!isLoading) {
-            isLoading = true
-            if (isRefresh) {
-                allCharactersRecyclerView.adapter?.notifyItemRangeRemoved(0, state.list.size)
-                state.list.clear()
-                state.page = 1
-            }
-            characterRepositoryImpl.getCharacters(state.page, cancellationTokenSource.token)
-                .continueWith({
-                    processResponseFromServer(it)
-                }, Task.BACKGROUND_EXECUTOR, cancellationTokenSource.token)
-                .continueWith({
-                    notifyAdapter()
-                    progressBarFirst.isVisible = false
-                    progressBarSecond.isVisible = false
-                }, Task.UI_THREAD_EXECUTOR, cancellationTokenSource.token)
-        } else {
-            swipeLayout.isRefreshing = false
-        }
+        mainPresenter.loadCharacters(isRefresh)
     }
 
-    private fun notifyAdapter() {
-        if (state.paginationFooter.errorMessage != null ||
-            state.paginationFooter.isEndOfPages
-        ) {
-            notifyChangeAdapter()
-        } else {
-            notifyInsertAdapter()
-        }
-        if (progressAnimator.isRunning) {
-            progressAnimator.cancel()
-        }
-        swipeLayout.isRefreshing = false
-        isLoading = false
-    }
-
-    private fun notifyInsertAdapter() {
-        allCharactersRecyclerView.adapter?.notifyItemRangeInserted(oldSizeOfListCharacters,
-            state.list.size - oldSizeOfListCharacters)
-        if (oldSizeOfListCharacters == 0) {
-            allCharactersRecyclerView.scrollToPosition(0)
-        }
-        changePaginationFooter(false, null)
-    }
-
-    private fun notifyChangeAdapter() {
-        allCharactersRecyclerView.adapter?.run { notifyItemChanged(itemCount - 1) }
-        changePaginationFooter(false, null)
-    }
 
     private fun changePaginationFooter(isEndPage: Boolean, errorMessage: String?) {
         state.paginationFooter.isEndOfPages = isEndPage
         state.paginationFooter.errorMessage = errorMessage
-    }
-
-    private fun processResponseFromServer(characterResponse: Task<CharactersResponse>) {
-        when {
-            characterResponse.error != null -> {
-                changePaginationFooter(false, characterResponse.error.message)
-            }
-            characterResponse.result.info.next == null -> {
-                changePaginationFooter(true, null)
-            }
-            else -> {
-                oldSizeOfListCharacters = state.list.size
-                if (state.list.isNotEmpty() && state.page == 1) {
-                    state.list.clear()
-                }
-                state.list.addAll(characterResponse.result.characters)
-                ++state.page
-                changePaginationFooter(false, null)
-            }
-        }
     }
 
     private fun initRecycler() {
@@ -227,8 +141,53 @@ class AllCharactersListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cancellationTokenSource.cancel()
+        mainPresenter.detach()
     }
 
+    override fun showErrorFooter(charactersResponse: Task<CharactersResponse>) {
+        changePaginationFooter(false, charactersResponse.error.message)
+    }
 
+    override fun showEndPageFooter() {
+        changePaginationFooter(true, null)
+    }
+
+    override fun showLoadingFooter(list: List<CharactersInfo>) {
+        oldSizeOfListCharacters = state.list.size
+        if (state.list.isNotEmpty() && state.page == 1) {
+            state.list.clear()
+        }
+        state.list.addAll(list)
+        ++state.page
+        changePaginationFooter(false, null)
+    }
+
+    override fun showProgress() {
+        when (state.isSpoiledDb) {
+            true -> {
+                progressBarSecond.isVisible = true
+                defineObjectAnimator().start()
+                state.isSpoiledDb = null
+            }
+            false -> {
+                progressBarFirst.isVisible = true
+                changePaginationFooter(false, null)
+                state.isSpoiledDb = null
+            }
+            else -> {
+                allCharactersRecyclerView.adapter?.notifyDataSetChanged()
+                changePaginationFooter(false, null)
+            }
+        }
+    }
+
+    override fun hideProgress() {
+        allCharactersRecyclerView.adapter?.notifyDataSetChanged()
+        if (progressAnimator.isRunning) {
+            progressAnimator.cancel()
+        }
+        swipeLayout.isRefreshing = false
+        progressBarFirst.isVisible = false
+        progressBarSecond.isVisible = false
+    }
 }
